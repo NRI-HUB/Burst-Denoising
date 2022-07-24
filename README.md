@@ -1,3 +1,9 @@
+# Project Contributors
+1. Kyathi RamaDevi(Team Leader)
+2. Koppula Narayana Reddy(Team Member)
+3. Kunchi Kiran Teja(Team Member)
+4. Pavan Teja(Team Member)
+
 # Burst Denoising with Kernel Prediction Networks
 Ben Mildenhall | Jonathan T. Barron | Jiawen Chen | Dillon Sharlet | Ren Ng | Robert Carroll
 
@@ -12,6 +18,8 @@ This code uses the following external packages:
 * SciPy
 * Matplotlib
 
+
+
 ## Dataset
 
 Synthetic training data is generated using the OpenImages dataset, which can be manually downloaded following [these instructions](https://github.com/cvdfoundation/open-images-dataset).  
@@ -21,11 +29,5 @@ Synthetic training data is generated using the OpenImages dataset, which can be 
 Run the following command to train the kernel prediction network (KPN) burst denoising model:
 
 ```
-python kpn_train.py --dataset_dir $OPEN_IMAGES_DATASET_DIR --data_dir $REAL_BURST_DATA_DIR
+python kpn_train.py --dataset_dir $OPEN_IMAGES_DATASET_DIR --data_dir $REAL_BURST_DATA_DIR.
 
-
-## Project Contributors
-1. Kyathi RamaDevi(Team Leader)
-2. Koppula Narayana Reddy(Team Member)
-3. Kunchi Kiran Teja(Team Member)
-4. Pavan Teja(Team Member)
