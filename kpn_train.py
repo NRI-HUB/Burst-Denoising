@@ -119,17 +119,17 @@ def train_merge_simple_get_synth_test(log_dir):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     with tf.Session(config=config) as sess:
-      print 'Initializers'
+      print ('Initializers')
       sess.run(tf.global_variables_initializer())
       sess.run(tf.local_variables_initializer())
 
-      print 'Thread coordinator'
+      print ('Thread coordinator')
       coord = tf.train.Coordinator()
       threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
       max_steps = FLAGS.max_number_of_steps
       for i_step in range(max_steps):
-        print i_step
+        print (i_step)
         batch_np = sess.run(full_batch)
         filename = 'synthetic_{}x{}x{}x{}_num{:03d}.npz'.format(batch, height, width, BURST_LENGTH, i_step)
         full_path = os.path.join(log_dir, filename)
@@ -188,11 +188,11 @@ def train_merge_simple(filenames):
         # sig_read = tf.pow(10., tf.random_uniform([batch, 1, 1, 1], -3., -2))
         # sig_shot = tf.pow(10., tf.random_uniform([batch, 1, 1, 1], -2., -1.5))
         dec = decimatergb(demosaic_truth, BURST_LENGTH) if color else demosaic_truth
-        print 'DEC',dec.get_shape().as_list()
+        print ('DEC',dec.get_shape().as_list())
         noisy_, _ = add_read_shot_tf(dec, sig_read, sig_shot)
         # noisy_ = dec # TAKE OUT TO RETURN THE NOISEEE
-        print 'NOISY_',noisy_.get_shape().as_list()
-        print 'DT2',demosaic_truth.get_shape().as_list()
+        print ('NOISY_',noisy_.get_shape().as_list())
+        print ('DT2',demosaic_truth.get_shape().as_list())
         # noisy = tf.clip_by_value(noisy_, 0., 1.)
         noisy = noisy_
 
@@ -206,10 +206,10 @@ def train_merge_simple(filenames):
 
         # demosaic_truth = sres_upshape(sres_out, 2)
 
-        print 'DT3',demosaic_truth.get_shape().as_list()
+        print ('DT3',demosaic_truth.get_shape().as_list())
 
         if color:
-          print 'NOISY pre',noisy.get_shape().as_list()
+          print ('NOISY pre',noisy.get_shape().as_list())
           noisy = small_bayer_stack(noisy)
           white_level = white_level[...,0]
           dumb0 = dumb_tf_demosaic(tf22reshape(noisy[...,::BURST_LENGTH]))
@@ -245,8 +245,8 @@ def train_merge_simple(filenames):
 
           
       dt = demosaic_truth
-      print 'DT4',demosaic_truth.get_shape().as_list()
-      print 'DT5',dt.get_shape().as_list()
+      print ('DT4',demosaic_truth.get_shape().as_list())
+      print ('DT5',dt.get_shape().as_list())
       nt = noisy
 
       sig_read = tf.tile(sig_read, [1, tf.shape(noisy)[1], tf.shape(noisy)[2], 1])
@@ -260,7 +260,7 @@ def train_merge_simple(filenames):
       tf.add_to_collection('inputs', noisy)
       tf.add_to_collection('inputs', dt)
       tf.add_to_collection('inputs', sig_tower)
-      print 'Added to collection'
+      print ('Added to collection')
 
       sig_shot = sig_tower[...,0:1]
       sig_read = sig_tower[...,1:2]
@@ -421,11 +421,11 @@ def train_merge_simple(filenames):
       losses = []
       for d in demosaic:
         if d.startswith(dnet):
-          print 'LOSSES for',d
+          print ('LOSSES for',d)
           a = 1.
           if anneals is not None and d in anneals:
             a = anneals[d]
-            print 'includes anneal'
+            print( 'includes anneal')
           losses.append(basic_img_loss(demosaic[d], dt) * a)
       slim.losses.add_loss(tf.reduce_sum(tf.stack(losses)))
 
@@ -509,11 +509,11 @@ def train_merge_simple(filenames):
       config.gpu_options.allow_growth = True
       with tf.Session(config=config) as sess:
         num_writers = max([len(plots[n]) for n in plots])
-        print 'Starting', num_writers, 'writers'
+        print ('Starting', num_writers, 'writers')
         writers = [tf.summary.FileWriter(FLAGS.train_log_dir + '/writer' + str(i), sess.graph) for i in range(num_writers)]
         saver = tf.train.Saver(max_to_keep=None)
 
-        print 'Initializers'
+        print ('Initializers')
         sess.run(tf.global_variables_initializer())
         sess.run(tf.local_variables_initializer())
 
@@ -521,11 +521,11 @@ def train_merge_simple(filenames):
         # not get restarted at every preemption event
         ckpt_path = tf.train.latest_checkpoint(FLAGS.train_log_dir)
         if ckpt_path is not None:
-          print 'Restoring from',ckpt_path
+          print ('Restoring from',ckpt_path)
           saver.restore(sess, ckpt_path)
 
 
-        print 'Thread coordinator'
+        print ('Thread coordinator')
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
@@ -534,10 +534,10 @@ def train_merge_simple(filenames):
           #run optimization step5
           _, loss, i = sess.run([train_step_g, total_loss, gs])
 
-          print 'Step',i,'loss =',loss
+          print( 'Step',i,'loss =',loss)
           #training set summaries for tensorboard
           if True and (((i+1)%10 == 0 and i < 200) or ((i+1)%100 == 0)):
-            print 'Writing summary at step',i
+            print ('Writing summary at step',i)
             tf_vars = [sig_read, demosaic_truth, shift, noisy, dt, white_level, sig_read, sig_shot, truth_all]
             np_vals = sess.run(tf_vars, feed_dict={g_index : 0})
             fdict = {tf_var : np_val for tf_var, np_val in zip(tf_vars, np_vals)}
@@ -547,7 +547,7 @@ def train_merge_simple(filenames):
               imgs, = sess.run([image_summaries], feed_dict=fdict)
               writers[0].add_summary(imgs, i)
           if (i+1)%2000 == 0:
-            print 'Saving ckpt at step',i
+            print ('Saving ckpt at step',i)
             saver.save(sess, FLAGS.train_log_dir + 'model.ckpt', global_step=i)
         for w in writers:
           w.close()
