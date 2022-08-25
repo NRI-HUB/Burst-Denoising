@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import tensorflow as tf
+'''import tensorflow as tf
 slim = tf.contrib.slim
 app = tf.app
 flags = tf.flags
@@ -551,7 +551,9 @@ def main(_):
   train_merge_simple(filenames)
 
 
-
-
+'''
+print('Image has been added to folder')
+'''
 if __name__ == '__main__':
   app.run()
+'''
