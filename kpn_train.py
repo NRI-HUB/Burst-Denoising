@@ -30,7 +30,6 @@ flags.DEFINE_float('learning_rate', .0001, 'The learning rate')
 
 flags.DEFINE_float('anneal', .9998, 'Anneal rate')
 
-
 flags.DEFINE_integer('max_number_of_steps', 500000,
                      'The maximum number of gradient steps.')
 
