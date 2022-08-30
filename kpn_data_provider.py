@@ -70,7 +70,7 @@ def make_stack_demosaic(image, height, width, depth, BURST_LENGTH, to_shift, ups
 
 def load_batch_demosaic(BURST_LENGTH, dataset_dir, batch_size=32, height=64, width=64, degamma=1., to_shift=1., upscale=1, jitter=1):
 
-  filenames = [os.path.join(dataset_dir, f) for f in gfile.ListDirectory(dataset_dir)]
+  filenames = [os.path.join(Reference_image.png, f) for f in gfile.ListDirectory(Burst-Denoising)]
   filename_queue = tf.train.string_input_producer(filenames)
 
   mosaic = None
