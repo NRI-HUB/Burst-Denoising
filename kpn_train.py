@@ -551,7 +551,15 @@ def main(_):
 
 
 '''
-print('Image has been added to folder')
+from numpy import asarray
+from PIL import Image
+from matplotlib import image
+from matplotlib import pyplot
+image = image.imread('third.png')
+print(image.dtype)
+print(image.shape)
+pyplot.imshow(image)
+pyplot.show()
 '''
 if __name__ == '__main__':
   app.run()
